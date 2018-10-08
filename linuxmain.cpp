@@ -10,6 +10,20 @@ string currentLevel;
 char loadedLevel[80][25];
 int spwnC, spwnR;
 
+bool GetKeyState(KeySym keySym) //https://www.unknowncheats.me/forum/1513388-post2.html?s=0d2d9dab056a3e2cd01a5d9892901d18
+{
+    if(g_pDisplay == NULL) {
+        return false;
+    }
+ 
+    char szKey[32];
+    int iKeyCodeToFind = XKeysymToKeycode(g_pDisplay, keySym);
+ 
+    XQueryKeymap(g_pDisplay, szKey);
+ 
+    return szKey[iKeyCodeToFind / 8] & (1 << (iKeyCodeToFind % 8));
+}
+
 void load_level(int &Col, int &Row, string levelName) {
 	bool charPos = false;
 	ifstream level;
