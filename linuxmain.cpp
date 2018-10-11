@@ -3,6 +3,7 @@
 #include <string.h>
 #include <fstream>
 #include <stdio.h>
+#include <X11/Xlib.h>
 
 using namespace std;
 
@@ -10,8 +11,7 @@ string currentLevel;
 char loadedLevel[80][25];
 int spwnC, spwnR;
 
-bool GetKeyState(KeySym keySym) //https://www.unknowncheats.me/forum/1513388-post2.html?s=0d2d9dab056a3e2cd01a5d9892901d18
-{
+bool GetKeyState(KeySym keySym) { //https://www.unknowncheats.me/forum/1513388-post2.html?s=0d2d9dab056a3e2cd01a5d9892901d18
     if(g_pDisplay == NULL) {
         return false;
     }
@@ -45,11 +45,11 @@ void load_level(int &Col, int &Row, string levelName) {
 						charPos = true;
 					}
 				}
-				if (loadedLevel[i][j] == '\n' || loadedLevel[i][j] == 'ù') {
+				if (loadedLevel[i][j] == '\n' || loadedLevel[i][j] == 'ï¿½') {
 					break;
 				}
 			}
-			if (loadedLevel[i][j] == 'ù') {
+			if (loadedLevel[i][j] == 'ï¿½') {
 				break;
 			}
 		}
@@ -58,7 +58,7 @@ void load_level(int &Col, int &Row, string levelName) {
 }
 
 string check_button() {
-	string value = (GetAsyncKeyState(VK_UP) < 0) ? ("UP") : (GetAsyncKeyState(VK_LEFT) < 0) ? ("LEFT") :((GetAsyncKeyState(VK_RIGHT) < 0) ? ("RIGHT") : ((GetAsyncKeyState(VK_DOWN) < 0) ? ("DOWN") : ((GetAsyncKeyState(VK_ESCAPE) < 0) ? ("ESC") : (" "))));
+	string value = (GetKeyState(VK_UP) < 0) ? ("UP") : (GetKeyState(VK_LEFT) < 0) ? ("LEFT") :((GetKeyState(VK_RIGHT) < 0) ? ("RIGHT") : ((GetKeyState(VK_DOWN) < 0) ? ("DOWN") : ((GetKeyState(VK_ESCAPE) < 0) ? ("ESC") : (" "))));
 	return value;
 }
 
@@ -94,7 +94,7 @@ void print_scene(int Col, int Row, float score) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-				cout << '°';
+				cout << 'ï¿½';
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			} else if (loadedLevel[i][j] == 'X') {
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
@@ -104,7 +104,7 @@ void print_scene(int Col, int Row, float score) {
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
 				cout << '_';
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-			} else if (!charPos) {				//Se il personaggio non è ancora stato posizionato
+			} else if (!charPos) {				//Se il personaggio non ï¿½ ancora stato posizionato
 				if (Col == j && Row == i) { 	//Ne verifica la posizione
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
 					cout << "O";			//E nel caso lo posiziona
@@ -112,13 +112,13 @@ void print_scene(int Col, int Row, float score) {
 					charPos = true;
 				} else {cout << loadedLevel[i][j];}
 			}
-			else if (loadedLevel[i][j] == 'ù') {break;}
+			else if (loadedLevel[i][j] == 'ï¿½') {break;}
 			else {cout << loadedLevel[i][j];}
 			
 			if (loadedLevel[i][j] == '\n') {break;}
 			
 		}
-		if (loadedLevel[i][j] == 'ù') {break;}
+		if (loadedLevel[i][j] == 'ï¿½') {break;}
 	}
 	//cout << "Frecce direzionali:\tmovimento\n\tTasto ESC:\trespawn" << endl;
 	//cout << endl << "COL: " << Col << endl << "ROW: " << Row;
