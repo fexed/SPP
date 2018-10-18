@@ -52,11 +52,11 @@ void load_level(int &Col, int &Row, string levelName) {
 						charPos = true;
 					}
 				}
-				if (loadedLevel[i][j] == '\n' || loadedLevel[i][j] == '�') {
+				if (loadedLevel[i][j] == '\n' || loadedLevel[i][j] == 'ù') {
 					break;
 				}
 			}
-			if (loadedLevel[i][j] == '�') {
+			if (loadedLevel[i][j] == 'ù') {
 				break;
 			}
 		}
@@ -101,7 +101,7 @@ void print_scene(int Col, int Row, float score) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
 				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-				cout << '�';
+				cout << '°';
 				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			} else if (loadedLevel[i][j] == 'X') {
 				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
@@ -119,13 +119,13 @@ void print_scene(int Col, int Row, float score) {
 					charPos = true;
 				} else {cout << loadedLevel[i][j];}
 			}
-			else if (loadedLevel[i][j] == '�') {break;}
+			else if (loadedLevel[i][j] == 'ù') {break;}
 			else {cout << loadedLevel[i][j];}
 			
 			if (loadedLevel[i][j] == '\n') {break;}
 			
 		}
-		if (loadedLevel[i][j] == '�') {break;}
+		if (loadedLevel[i][j] == 'ù') {break;}
 	}
 	//cout << "Frecce direzionali:\tmovimento\n\tTasto ESC:\trespawn" << endl;
 	//cout << endl << "COL: " << Col << endl << "ROW: " << Row;
@@ -147,7 +147,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 				if (button == "RIGHT") {Row++;}
 				if (button == "LEFT") {Row--;}
 				check_coin (Col, Row, score);
-				system("CLS");
+				system("clear");
 				print_scene(Col, Row, score);
 				
 				if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == '|' || loadedLevel[Row][Col] == 'X')
@@ -172,7 +172,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 				if (button == "RIGHT") {Row++;}
 				if (button == "LEFT") {Row--;}
 				check_coin (Col, Row, score);
-				system("CLS");
+				system("clear");
 				print_scene(Col, Row, score);
 				
 				if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == '|' || loadedLevel[Row][Col] == 'X')
@@ -193,7 +193,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
 			check_coin (Col, Row, score);
-			system("CLS");
+			system("clear");
 			print_scene(Col, Row, score);
 			usleep(25);
 		}
@@ -203,7 +203,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
 			check_coin (Col, Row, score);
-			system("CLS");
+			system("clear");
 			print_scene(Col, Row, score);
 			
 			if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == 'X' || loadedLevel[Row][Col] == '|')
