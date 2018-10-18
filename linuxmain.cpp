@@ -15,10 +15,9 @@ using std::ifstream;
 string currentLevel;
 char loadedLevel[80][25];
 int spwnC, spwnR;
+Display* g_pDisplay;
 
 bool GetKeyState(KeySym keySym) { //https://www.unknowncheats.me/forum/1513388-post2.html?s=0d2d9dab056a3e2cd01a5d9892901d18
-	Display* g_pDisplay = XOpenDisplay(NULL);
-	
     if(g_pDisplay == NULL) {
         return false;
     }
@@ -222,6 +221,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 }
 
 int main(int argc, char *argv[]) {
+	g_pDisplay = XOpenDisplay(NULL);
 	int charCol = 0, charRow = 0;
 	float score = 0;
 	string button;
@@ -238,5 +238,6 @@ int main(int argc, char *argv[]) {
 	}
 	
     //system("PAUSE");
+	XCloseDisplay(g_pDisplay);
     return EXIT_SUCCESS;
 }
