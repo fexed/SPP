@@ -8,6 +8,7 @@
 #include <X11/keysym.h>
 #include <X11/keysymdef.h>
 #include <string.h>
+#include "keyboard.h"
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -25,9 +26,10 @@ using std::ifstream;
 string currentLevel;
 char loadedLevel[80][25];
 int spwnC, spwnR;
+cKeyboard kb;
 Display* g_pDisplay;
 
-bool GetKeyState(KeySym keySym) { //https://www.unknowncheats.me/forum/1513388-post2.html?s=0d2d9dab056a3e2cd01a5d9892901d18
+/*bool GetKeyState(KeySym keySym) { //https://www.unknowncheats.me/forum/1513388-post2.html?s=0d2d9dab056a3e2cd01a5d9892901d18
 	if(g_pDisplay == NULL) {
 		return false;
 	}
@@ -38,7 +40,7 @@ bool GetKeyState(KeySym keySym) { //https://www.unknowncheats.me/forum/1513388-p
 	XQueryKeymap(g_pDisplay, szKey);
 
 	return szKey[iKeyCodeToFind / 8] & (1 << (iKeyCodeToFind % 8));
-}
+}*/
 
 void load_level(int &Col, int &Row, string levelName) {
 	bool charPos = false;
@@ -74,7 +76,7 @@ void load_level(int &Col, int &Row, string levelName) {
 }
 
 string check_button() {
-	string value = (GetKeyState(XStringToKeysym("Up"))) ? ("UP") : (GetKeyState(XStringToKeysym("Left"))) ? ("LEFT") : (GetKeyState(XStringToKeysym("Right"))) ? ("RIGHT") : (GetKeyState(XStringToKeysym("Down"))) ? ("DOWN") : (GetKeyState(XStringToKeysym("Escape")) ? ("ESC") : (" "));
+	string value = (kb.getKeyState(KEY_UP)) ? ("UP") : (kb.getKeyState(KEY_LEFT)) ? ("LEFT") : (kb.getKeyState(KEY_RIGHT)) ? ("RIGHT") : (kb.getKeyState(KEY_DOWN)) ? ("DOWN") : (kb.getKeyState(KEY_ESC)) ? ("ESC") : (" ");
 	return value;
 }
 
