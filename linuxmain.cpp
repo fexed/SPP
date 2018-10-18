@@ -5,7 +5,17 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
+#include <X11/keysym.h>
+#include <X11/keysymdef.h>
 #include <string.h>
+
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 using std::string;
 using std::endl;
@@ -18,17 +28,16 @@ int spwnC, spwnR;
 Display* g_pDisplay;
 
 bool GetKeyState(KeySym keySym) { //https://www.unknowncheats.me/forum/1513388-post2.html?s=0d2d9dab056a3e2cd01a5d9892901d18
-    if(g_pDisplay == NULL) {
-        return false;
-    }
- 
-    char szKey[32];
-    int iKeyCodeToFind = XKeysymToKeycode(g_pDisplay, keySym);
- 
-    XQueryKeymap(g_pDisplay, szKey);
- 
-    return szKey[iKeyCodeToFind / 8] & (1 << (iKeyCodeToFind % 8));
-    return false;
+	if(g_pDisplay == NULL) {
+		return false;
+	}
+
+	char szKey[32];
+	int iKeyCodeToFind = XKeysymToKeycode(g_pDisplay, keySym);
+
+	XQueryKeymap(g_pDisplay, szKey);
+
+	return szKey[iKeyCodeToFind / 8] & (1 << (iKeyCodeToFind % 8));
 }
 
 void load_level(int &Col, int &Row, string levelName) {
@@ -65,7 +74,7 @@ void load_level(int &Col, int &Row, string levelName) {
 }
 
 string check_button() {
-	string value = (GetKeyState(XStringToKeysym("XK_Up"))) ? ("UP") : (GetKeyState(XStringToKeysym("XK_Left")) < 0) ? ("LEFT") :((GetKeyState(XStringToKeysym("XK_Right")) < 0) ? ("RIGHT") : ((GetKeyState(XStringToKeysym("XK_Down")) < 0) ? ("DOWN") : ((GetKeyState(XStringToKeysym("XK_Escape")) < 0) ? ("ESC") : (" "))));
+	string value = (GetKeyState(XStringToKeysym("Up"))) ? ("UP") : (GetKeyState(XStringToKeysym("Left"))) ? ("LEFT") : (GetKeyState(XStringToKeysym("Right"))) ? ("RIGHT") : (GetKeyState(XStringToKeysym("Down"))) ? ("DOWN") : (GetKeyState(XStringToKeysym("Escape")) ? ("ESC") : (" "));
 	return value;
 }
 
@@ -100,22 +109,22 @@ void print_scene(int Col, int Row, float score) {
 	for (j = 0; j <= 25; j++) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
-				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-				cout << '°';
-				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+				printf(ANSI_COLOR_YELLOW);
+				cout << '\'';
+				printf(ANSI_COLOR_RESET);
 			} else if (loadedLevel[i][j] == 'X') {
-				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+				printf(ANSI_COLOR_RED);
 				cout << loadedLevel[i][j];
-				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+				printf(ANSI_COLOR_RESET);
 			} else if (loadedLevel[i][j] == 'W') {
-				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
+				printf(ANSI_COLOR_GREEN);
 				cout << '_';
-				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+				printf(ANSI_COLOR_RESET);
 			} else if (!charPos) {				//Se il personaggio non � ancora stato posizionato
 				if (Col == j && Row == i) { 	//Ne verifica la posizione
-					//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+					printf(ANSI_COLOR_MAGENTA);
 					cout << "O";			//E nel caso lo posiziona
-					//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+					printf(ANSI_COLOR_RESET);
 					charPos = true;
 				} else {cout << loadedLevel[i][j];}
 			}
@@ -221,23 +230,23 @@ void char_move (string button, int& Col, int& Row, float& score) {
 }
 
 int main(int argc, char *argv[]) {
-	g_pDisplay = XOpenDisplay(NULL);
+	g_pDisplay = XOpenDisplay(0);
 	int charCol = 0, charRow = 0;
 	float score = 0;
 	string button;
 	currentLevel = "A";
-	
+
 	load_level(charCol, charRow, "levels/" + currentLevel);
-	//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-	
- 	while(true) {
+	printf(ANSI_COLOR_RESET);
+
+	while(true) {
 		system("clear");
 		print_scene(charCol, charRow, score);
 	 	do {button = check_button();} while (button == " ");
 	 	char_move(button, charCol, charRow, score);
 	}
-	
-    //system("PAUSE");
+
+	//system("PAUSE");
 	XCloseDisplay(g_pDisplay);
-    return EXIT_SUCCESS;
+    	return EXIT_SUCCESS;
 }
