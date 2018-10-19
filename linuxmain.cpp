@@ -103,23 +103,23 @@ void respawn(int& Col, int& Row, float& score) {
 void print_scene(int Col, int Row, float score) {
 	int i, j;
 	bool charPos = false;
-	printw("\tSplatform\t\tScore: %d\t\tLINUXVER\t\n--------------------------------------------------------------------------------\n", score); //Intestazione
+	mvprintw(0,0,"\tSplatform\t\tScore: %d\t\tLINUXVER\t\n--------------------------------------------------------------------------------\n", score); //Intestazione
 	for (j = 0; j <= 25; j++) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
-				addch('\'');
+				mvaddch(j, i, '\'');
 			} else if (loadedLevel[i][j] == 'X') {
-				addch(loadedLevel[i][j]);
+				mvaddch(j, i, loadedLevel[i][j]);
 			} else if (loadedLevel[i][j] == 'W') {
-				addch('_');
+				mvaddch(j, i, '_');
 			} else if (!charPos) {				//Se il personaggio non è ancora stato posizionato
 				if (Col == j && Row == i) { 	//Ne verifica la posizione
-					addch('O');			//E nel caso lo posiziona
+					mvaddch(j, i, 'O');			//E nel caso lo posiziona
 					charPos = true;
-				} else {addch(loadedLevel[i][j]);}
+				} else {mvaddch(j, i, loadedLevel[i][j]);}
 			}
 			else if (loadedLevel[i][j] == 'ù') {break;}
-			else {addch(loadedLevel[i][j]);}
+			else {mvaddch(j, i, loadedLevel[i][j]);}
 			
 			if (loadedLevel[i][j] == '\n') {break;}
 			
@@ -176,8 +176,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 				
 				if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == '|' || loadedLevel[Row][Col] == 'X')
 				{respawn(Col, Row, score); break;}
-				else if (loadedLevel[Row][Col] == '_' || loadedLevel[Row][Col] == '/' || loadedLevel[Row][Col] == '\\' || loadedLevel[Row][Col] == '^')
-				{break;}
+				else if (loadedLevel[Row][Col] == '_' || loadedLevel[Row][Col] == '/' || loadedLevel[Row][Col] == '\\' || loadedLevel[Row][Col] == '^') {break;}
 				usleep(25);
 			}	
 		}
@@ -191,8 +190,8 @@ void char_move (string button, int& Col, int& Row, float& score) {
 			button = check_button();
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
-			check_coin (Col, Row, score);
-			erase();
+			//check_coin (Col, Row, score);
+			//erase();
 			print_scene(Col, Row, score);
 			usleep(250);
 		}
@@ -201,8 +200,8 @@ void char_move (string button, int& Col, int& Row, float& score) {
 			button = check_button();
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
-			check_coin (Col, Row, score);
-			erase();
+			//check_coin (Col, Row, score);
+			//erase();
 			print_scene(Col, Row, score);
 			
 			if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == 'X' || loadedLevel[Row][Col] == '|')
@@ -228,7 +227,7 @@ int main(int argc, char *argv[]) {
 	printf(ANSI_COLOR_RESET);
 	scr = initscr();
 	//wresize(scr, 25, 80);
-	start_color();
+	//start_color();
 	notimeout(scr, true);
 	nodelay(scr, true);
 	keypad(scr, TRUE);
@@ -236,7 +235,7 @@ int main(int argc, char *argv[]) {
 	cbreak();
 
 	while(true) {
-		erase();
+		//erase();
 		print_scene(charCol, charRow, score);
 	 	button = check_button();
 	 	char_move(button, charCol, charRow, score);
