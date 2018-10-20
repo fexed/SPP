@@ -24,6 +24,7 @@ WINDOW* scr;
 string currentLevel;
 char loadedLevel[80][25];
 int spwnC, spwnR;
+char* name;
 
 string GetKeyState() {
 	int k = getch();
@@ -76,7 +77,7 @@ string check_button() {
 	return value;
 }
 
-void check_coin (int Col, int Row, float& score) {
+void check_coin (int Col, int Row, int& score) {
 	if (loadedLevel[Row][Col] == '^') {
 		////Beep(1000, 100);
 		//cout << "\a";
@@ -88,7 +89,7 @@ void check_coin (int Col, int Row, float& score) {
 	}
 }
 
-void respawn(int& Col, int& Row, float& score) {
+void respawn(int& Col, int& Row, int& score) {
 	//decrementa vita
 	load_level(Col, Row, "levels/" + currentLevel);
 	//Beep(750, 50);
@@ -100,10 +101,9 @@ void respawn(int& Col, int& Row, float& score) {
 	usleep(100);
 }
 
-void print_scene(int Col, int Row, float score) {
+void print_scene(int Col, int Row, int score) {
 	int i, j;
 	bool charPos = false;
-	mvprintw(0,0,"\tSplatform\t\tScore: %d\t\tLINUXVER\t\n--------------------------------------------------------------------------------\n", score); //Intestazione
 	for (j = 0; j <= 25; j++) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
@@ -112,8 +112,8 @@ void print_scene(int Col, int Row, float score) {
 				mvaddch(j, i, loadedLevel[i][j]);
 			} else if (loadedLevel[i][j] == 'W') {
 				mvaddch(j, i, '_');
-			} else if (!charPos) {				//Se il personaggio non è ancora stato posizionato
-				if (Col == j && Row == i) { 	//Ne verifica la posizione
+			} else if (!charPos) {				    //Se il personaggio non è ancora stato posizionato
+				if (Col == j && Row == i) { 		//Ne verifica la posizione
 					mvaddch(j, i, 'O');			//E nel caso lo posiziona
 					charPos = true;
 				} else {mvaddch(j, i, loadedLevel[i][j]);}
@@ -126,11 +126,13 @@ void print_scene(int Col, int Row, float score) {
 		}
 		if (loadedLevel[i][j] == 'ù') {break;}
 	}
+	printw("[%s]\t\tScore: %d\t\tLINUXVER"/*\n--------------------------------------------------------------------------------\n"*/, name, score); //Intestazione
+	printw("C%d R%d", Col, Row);
 	//cout << "Frecce direzionali:\tmovimento\n\tTasto ESC:\trespawn" << endl;
 	//cout << endl << "COL: " << Col << endl << "ROW: " << Row;
 }
 
-void char_move (string button, int& Col, int& Row, float& score) {
+void char_move (string button, int& Col, int& Row, int& score) {
 	if (button == "RIGHT") {
 		if (loadedLevel[Row+1][Col] == 'W') {
 			currentLevel = "B";
@@ -190,7 +192,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 			button = check_button();
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
-			//check_coin (Col, Row, score);
+			check_coin (Col, Row, score);
 			//erase();
 			print_scene(Col, Row, score);
 			usleep(250);
@@ -200,7 +202,7 @@ void char_move (string button, int& Col, int& Row, float& score) {
 			button = check_button();
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
-			//check_coin (Col, Row, score);
+			check_coin (Col, Row, score);
 			//erase();
 			print_scene(Col, Row, score);
 			
@@ -220,12 +222,13 @@ void char_move (string button, int& Col, int& Row, float& score) {
 
 int main(int argc, char *argv[]) {
 	int charCol = 0, charRow = 0;
-	float score = 0;
+	int score = 0;
 	string button;
 	currentLevel = "A";
 	load_level(charCol, charRow, "levels/" + currentLevel);
 	printf(ANSI_COLOR_RESET);
 	scr = initscr();
+	name = argv[0];
 	//wresize(scr, 25, 80);
 	//start_color();
 	notimeout(scr, true);
@@ -235,7 +238,7 @@ int main(int argc, char *argv[]) {
 	cbreak();
 
 	while(true) {
-		//erase();
+		erase();
 		print_scene(charCol, charRow, score);
 	 	button = check_button();
 	 	char_move(button, charCol, charRow, score);
