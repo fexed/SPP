@@ -107,26 +107,26 @@ void print_scene(int Col, int Row, int score) {
 	for (j = 0; j <= 25; j++) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
-				mvaddch(j, i, '\'');
+				addch('\'');
 			} else if (loadedLevel[i][j] == 'X') {
-				mvaddch(j, i, loadedLevel[i][j]);
+				addch(loadedLevel[i][j]);
 			} else if (loadedLevel[i][j] == 'W') {
-				mvaddch(j, i, '_');
+				addch('_');
 			} else if (!charPos) {				    //Se il personaggio non è ancora stato posizionato
 				if (Col == j && Row == i) { 		//Ne verifica la posizione
-					mvaddch(j, i, 'O');			//E nel caso lo posiziona
+					addch('O');			//E nel caso lo posiziona
 					charPos = true;
-				} else {mvaddch(j, i, loadedLevel[i][j]);}
+				} else {addch(loadedLevel[i][j]);}
 			}
 			else if (loadedLevel[i][j] == 'ù') {break;}
-			else {mvaddch(j, i, loadedLevel[i][j]);}
+			else {addch(loadedLevel[i][j]);}
 			
 			if (loadedLevel[i][j] == '\n') {break;}
 			
 		}
 		if (loadedLevel[i][j] == 'ù') {break;}
 	}
-	printw("[%s]\t\tScore: %d\t\tLINUXVER"/*\n--------------------------------------------------------------------------------\n"*/, name, score); //Intestazione
+	printw("[%s]\t\tScore: %d\t\tLINUXVER\t"/*\n--------------------------------------------------------------------------------\n"*/, name, score); //Intestazione
 	printw("C%d R%d", Col, Row);
 	//cout << "Frecce direzionali:\tmovimento\n\tTasto ESC:\trespawn" << endl;
 	//cout << endl << "COL: " << Col << endl << "ROW: " << Row;
