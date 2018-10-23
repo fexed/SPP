@@ -101,19 +101,27 @@ void print_scene(int Col, int Row, int score) {
 	for (j = 0; j <= 25; j++) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
+				attron(COLOR_PAIR(2));
 				addch('\'');
+				attroff(COLOR_PAIR(2));
 			} else if (loadedLevel[i][j] == 'X') {
+				attron(COLOR_PAIR(1));
 				addch(loadedLevel[i][j]);
+				attroff(COLOR_PAIR(1));
 			} else if (loadedLevel[i][j] == 'W') {
+				attron(COLOR_PAIR(3));
 				addch('_');
+				attron(COLOR_PAIR(3));
 			} else if (!charPos) {				    //Se il personaggio non è ancora stato posizionato
 				if (Col == j && Row == i) { 		//Ne verifica la posizione
+					attron(COLOR_PAIR(1));
 					addch('O');			//E nel caso lo posiziona
+					attroff(COLOR_PAIR(1));
 					charPos = true;
 				} else {addch(loadedLevel[i][j]);}
 			}
 			else if (loadedLevel[i][j] == 'ù') {break;}
-			else {addch(loadedLevel[i][j]);}
+			else {attron(COLOR_PAIR(4)); addch(loadedLevel[i][j]); attroff(COLOR_PAIR(4));}
 			
 			if (loadedLevel[i][j] == '\n') {break;}
 			
@@ -226,6 +234,11 @@ int main(int argc, char *argv[]) {
 	keypad(scr, TRUE);
 	noecho();
 	cbreak();
+	start_color();
+	init_pair(1, COLOR_RED, COLOR_BLACK);
+	init_pair(2, COLOR_YELLOW, COLOR_WHITE);
+	init_pair(3, COLOR_GREEN, COLOR_BLACK);
+	init_pair(4, COLOR_WHITE, COLOR_BLACK);
 
 	while(true) {
 		erase();
