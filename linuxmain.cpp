@@ -7,13 +7,7 @@
 #include <string.h>
 #include <curses.h>
 
-#define ANSI_COLOR_RED     "\x1b[31m"
-#define ANSI_COLOR_GREEN   "\x1b[32m"
-#define ANSI_COLOR_YELLOW  "\x1b[33m"
-#define ANSI_COLOR_BLUE    "\x1b[34m"
-#define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN    "\x1b[36m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
+#define _SECONDS_ 50000
 
 using std::string;
 using std::endl;
@@ -29,7 +23,7 @@ char* name;
 string GetKeyState() {
 	int k = getch();
 
-	if (k == 'w') return "UP";
+	if (k == 'w' || k == ' ') return "UP";
 	if (k == 'a') return "LEFT";
 	if (k == 'd') return "RIGHT";
 	if (k == 's') return "DOWN";
@@ -161,8 +155,7 @@ void char_move (string button, int& Col, int& Row, int& score) {
 		else if (loadedLevel[Row+1][Col] == 'X') {respawn(Col, Row, score);}
 		check_coin (Col, Row, score);
 		usleep(100);
-	}
-	if (button == "LEFT") {
+	} else if (button == "LEFT") {
 		if (loadedLevel[Row-1][Col] == '_' || loadedLevel[Row-1][Col] == '^') {Row--;}
 		else if (loadedLevel[Row-1][Col+1] == '/' || loadedLevel[Row][Col] == '/') {Row--; Col++;}
 		else if (loadedLevel[Row-1][Col] == '\\' || loadedLevel[Row][Col] == '\\') {Row--; Col--;}
@@ -185,17 +178,17 @@ void char_move (string button, int& Col, int& Row, int& score) {
 		else if (loadedLevel[Row-1][Col] == 'X') {respawn(Col, Row, score);}
 		check_coin (Col, Row, score);
 		usleep(100);
-	}
-	if (button == "UP") {
-		for (int i = 0; i <= 4; i++) {
-			if (i < 4) {Col--;}
+	} else if (button == "UP") {
+		int height = 5;
+		for (int i = 0; i <= height; i++) {
+			if (i < height) {Col--;}
 			button = check_button();
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
 			check_coin (Col, Row, score);
-			//erase();
+			erase();
 			print_scene(Col, Row, score);
-			usleep(250);
+			usleep(_SECONDS_);
 		}
 		while (true) {
 			Col++;
@@ -203,21 +196,21 @@ void char_move (string button, int& Col, int& Row, int& score) {
 			if (button == "RIGHT" && loadedLevel[Row+1][Col] != '|' && loadedLevel[Row][Col] != '/') {Row++;}
 			if (button == "LEFT" && loadedLevel[Row-1][Col] != '|' && loadedLevel[Row][Col] != '\\') {Row--;}
 			check_coin (Col, Row, score);
-			//erase();
+			erase();
 			print_scene(Col, Row, score);
 			
 			if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == 'X' || loadedLevel[Row][Col] == '|')
 			{respawn(Col, Row, score); break;}
 			else if (loadedLevel[Row][Col] == '_' || loadedLevel[Row][Col] == '/' || loadedLevel[Row][Col] == '\\' || loadedLevel[Row][Col] == '^') {break;}
 			
-			usleep(250);
+			usleep(_SECONDS_);
 		}
 	}
 	/*if (button == "DOWN")
 	{
 		
 	}*/
-	if (button == "ESC") {load_level(Col, Row, "levels/" + currentLevel); respawn(Col, Row, score);}
+	 else if (button == "ESC") {load_level(Col, Row, "levels/" + currentLevel); respawn(Col, Row, score);}
 }
 
 int main(int argc, char *argv[]) {
@@ -226,11 +219,8 @@ int main(int argc, char *argv[]) {
 	string button;
 	currentLevel = "A";
 	load_level(charCol, charRow, "levels/" + currentLevel);
-	printf(ANSI_COLOR_RESET);
 	scr = initscr();
 	name = argv[0];
-	//wresize(scr, 25, 80);
-	//start_color();
 	notimeout(scr, true);
 	nodelay(scr, true);
 	keypad(scr, TRUE);
@@ -240,7 +230,7 @@ int main(int argc, char *argv[]) {
 	while(true) {
 		erase();
 		print_scene(charCol, charRow, score);
-	 	button = check_button();
+	 	do {button = check_button();} while(button == " ");
 	 	char_move(button, charCol, charRow, score);
 	}
 
