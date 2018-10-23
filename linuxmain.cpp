@@ -20,18 +20,13 @@ char loadedLevel[80][25];
 int spwnC, spwnR;
 char* name;
 
-string GetKeyState() {
-	int k = getch();
-
-	if (k == 'w' || k == ' ' || k == KEY_UP) return "UP";
-	if (k == 'a' || k == KEY_LEFT) return "LEFT";
-	if (k == 'd' || k == KEY_RIGHT) return "RIGHT";
-	if (k == 's' || k == KEY_DOWN) return "DOWN";
+/*string GetKeyState() {
+	
 	//else if (k == 27 && k == "Escape") return true;
 
 	return " ";
 	
-}
+}*/
 
 void load_level(int &Col, int &Row, string levelName) {
 	bool charPos = false;
@@ -66,14 +61,18 @@ void load_level(int &Col, int &Row, string levelName) {
 }
 
 string check_button() {
-	string value = GetKeyState();
-	//value = (GetKeyState("Up")) ? ("UP") : (GetKeyState("Left")) ? ("LEFT") : (GetKeyState("Right")) ? ("RIGHT") : (GetKeyState("Down")) ? ("DOWN") : (GetKeyState("Escape")) ? ("ESC") : (" ");
-	return value;
+	int k = getch();
+
+	if (k == 'w' || k == ' ' || k == KEY_UP) return "UP";
+	if (k == 'a' || k == KEY_LEFT) return "LEFT";
+	if (k == 'd' || k == KEY_RIGHT) return "RIGHT";
+	if (k == 's' || k == KEY_DOWN) return "DOWN";
+	return " ";
 }
 
 void check_coin (int Col, int Row, int& score) {
 	if (loadedLevel[Row][Col] == '^') {
-		////Beep(1000, 100);
+		//Beep(1000, 100);
 		//cout << "\a";
 		score++;
 		if (loadedLevel[Row+1][Col] == ' ' && loadedLevel[Row-1][Col] == ' ')
@@ -85,6 +84,7 @@ void check_coin (int Col, int Row, int& score) {
 
 void respawn(int& Col, int& Row, int& score) {
 	//decrementa vita
+	score--;
 	load_level(Col, Row, "levels/" + currentLevel);
 	//Beep(750, 50);
 	//Beep(500, 150);
@@ -102,7 +102,7 @@ void print_scene(int Col, int Row, int score) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
 				attron(COLOR_PAIR(2));
-				addch('\'');
+				addch('O');
 				attroff(COLOR_PAIR(2));
 			} else if (loadedLevel[i][j] == 'X') {
 				attron(COLOR_PAIR(1));
@@ -111,11 +111,11 @@ void print_scene(int Col, int Row, int score) {
 			} else if (loadedLevel[i][j] == 'W') {
 				attron(COLOR_PAIR(3));
 				addch('_');
-				attron(COLOR_PAIR(3));
+				attroff(COLOR_PAIR(3));
 			} else if (!charPos) {				    //Se il personaggio non è ancora stato posizionato
 				if (Col == j && Row == i) { 		//Ne verifica la posizione
 					attron(COLOR_PAIR(1));
-					addch('O');			//E nel caso lo posiziona
+					addch('I');			//E nel caso lo posiziona
 					attroff(COLOR_PAIR(1));
 					charPos = true;
 				} else {addch(loadedLevel[i][j]);}
@@ -187,7 +187,7 @@ void char_move (string button, int& Col, int& Row, int& score) {
 		check_coin (Col, Row, score);
 		usleep(100);
 	} else if (button == "UP") {
-		int height = 5;
+		int height = 8;
 		for (int i = 0; i <= height; i++) {
 			if (i < height) {Col--;}
 			button = check_button();
@@ -236,7 +236,7 @@ int main(int argc, char *argv[]) {
 	cbreak();
 	start_color();
 	init_pair(1, COLOR_RED, COLOR_BLACK);
-	init_pair(2, COLOR_YELLOW, COLOR_WHITE);
+	init_pair(2, COLOR_RED, COLOR_YELLOW);
 	init_pair(3, COLOR_GREEN, COLOR_BLACK);
 	init_pair(4, COLOR_WHITE, COLOR_BLACK);
 
