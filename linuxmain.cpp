@@ -23,11 +23,11 @@ char* name;
 string GetKeyState() {
 	int k = getch();
 
-	if (k == 'w' || k == ' ') return "UP";
-	if (k == 'a') return "LEFT";
-	if (k == 'd') return "RIGHT";
-	if (k == 's') return "DOWN";
-	//else if (k == 27 && key == "Escape") return true;
+	if (k == 'w' || k == ' ' || k == KEY_UP) return "UP";
+	if (k == 'a' || k == KEY_LEFT) return "LEFT";
+	if (k == 'd' || k == KEY_RIGHT) return "RIGHT";
+	if (k == 's' || k == KEY_DOWN) return "DOWN";
+	//else if (k == 27 && k == "Escape") return true;
 
 	return " ";
 	
