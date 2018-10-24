@@ -28,20 +28,20 @@ char* name;
 	
 }*/
 
-void load_level(int &Col, int &Row, string levelName) {
+void load_level(/*int &Col, int &Row,*/ string levelName) {
 	bool charPos = false;
 	ifstream level;
 	int i, j;
 	
-	level.open(levelName.c_str());
+	level.open(levelName);
 	if (level.is_open()) {
 		for (j = 0; j <= 25; j++) {
 			for (i = 0; i <= 80; i++) {
 				loadedLevel[i][j] = level.get();
 				if (!charPos) {
 					if (loadedLevel[i][j] == 'C') {
-						Col = j;
-						Row = i;
+						//Col = j;
+						//Row = i;
 						spwnC = j;
 						spwnR = i;
 						loadedLevel[i][j] = '_';
@@ -84,21 +84,20 @@ void check_coin (int Col, int Row, int& score) {
 
 void respawn(int& Col, int& Row, int& score) {
 	//decrementa vita
-	score--;
-	load_level(Col, Row, "levels/" + currentLevel);
+	load_level(/*Col, Row,*/ "levels/" + currentLevel);
 	//Beep(750, 50);
 	//Beep(500, 150);
 	//Beep(250, 300);
 	Col = spwnC;
 	Row = spwnR;
 	score = 0;
-	usleep(100);
+	usleep(_SECONDS_);
 }
 
 void print_scene(int Col, int Row, int score) {
 	int i, j;
 	bool charPos = false;
-	for (j = 0; j <= 25; j++) {
+	for (j = 0; j < 25; j++) {
 		for (i = 0; i < 80; i++) {
 			if (loadedLevel[i][j] == '^') {
 				attron(COLOR_PAIR(2));
@@ -128,7 +127,7 @@ void print_scene(int Col, int Row, int score) {
 		}
 		if (loadedLevel[i][j] == 'ù') {break;}
 	}
-	printw("[%s]\t\tScore: %d\t\tLINUXVER\t"/*\n--------------------------------------------------------------------------------\n"*/, name, score); //Intestazione
+	printw("\n[LINUX SPP]\t\tScore: %d\t\tLINUXVER\t"/*\n--------------------------------------------------------------------------------\n"*/, score); //Intestazione
 	printw("C%d R%d", Col, Row);
 	//cout << "Frecce direzionali:\tmovimento\n\tTasto ESC:\trespawn" << endl;
 	//cout << endl << "COL: " << Col << endl << "ROW: " << Row;
@@ -138,12 +137,13 @@ void char_move (string button, int& Col, int& Row, int& score) {
 	if (button == "RIGHT") {
 		if (loadedLevel[Row+1][Col] == 'W') {
 			currentLevel = "B";
-			load_level(Col, Row, "levels/" + currentLevel);
+			load_level(/*Col, Row,*/ "levels/" + currentLevel);
 		}
 		else if (loadedLevel[Row+1][Col] == '_' || loadedLevel[Row+1][Col] == '^') {Row++;}
 		else if (loadedLevel[Row+1][Col] == '/' || loadedLevel[Row][Col] == '/') {Row++; Col--;}
 		else if (loadedLevel[Row+1][Col+1] == '\\' || loadedLevel[Row][Col] == '\\') {Row++; Col++;}
 		else if (loadedLevel[Row+1][Col] == ' ' && loadedLevel[Row][Col] != '/') {
+			Row++;
 			for (int i = 0; ; i++) {
 				if (i > 0) {Col++;}
 				button = check_button();
@@ -157,7 +157,7 @@ void char_move (string button, int& Col, int& Row, int& score) {
 				{respawn(Col, Row, score); break;}
 				else if (loadedLevel[Row][Col] == '_' || loadedLevel[Row][Col] == '/' || loadedLevel[Row][Col] == '\\' || loadedLevel[Row][Col] == '^')
 				{break;}
-				usleep(10);
+				usleep(_SECONDS_);
 			}	
 		}
 		else if (loadedLevel[Row+1][Col] == 'X') {respawn(Col, Row, score);}
@@ -168,6 +168,7 @@ void char_move (string button, int& Col, int& Row, int& score) {
 		else if (loadedLevel[Row-1][Col+1] == '/' || loadedLevel[Row][Col] == '/') {Row--; Col++;}
 		else if (loadedLevel[Row-1][Col] == '\\' || loadedLevel[Row][Col] == '\\') {Row--; Col--;}
 		else if (loadedLevel[Row-1][Col] == ' ' && loadedLevel[Row][Col] != '\\') {
+			Row--;
 			for (int i = 0; ; i++) {
 				if (i > 0) {Col++;}
 				button = check_button();
@@ -180,7 +181,7 @@ void char_move (string button, int& Col, int& Row, int& score) {
 				if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == '|' || loadedLevel[Row][Col] == 'X')
 				{respawn(Col, Row, score); break;}
 				else if (loadedLevel[Row][Col] == '_' || loadedLevel[Row][Col] == '/' || loadedLevel[Row][Col] == '\\' || loadedLevel[Row][Col] == '^') {break;}
-				usleep(25);
+				usleep(_SECONDS_);
 			}	
 		}
 		else if (loadedLevel[Row-1][Col] == 'X') {respawn(Col, Row, score);}
@@ -218,7 +219,7 @@ void char_move (string button, int& Col, int& Row, int& score) {
 	{
 		
 	}*/
-	 else if (button == "ESC") {load_level(Col, Row, "levels/" + currentLevel); respawn(Col, Row, score);}
+	 else if (button == "ESC") {/*load_level(Col, Row, "levels/" + currentLevel);*/ respawn(Col, Row, score);}
 }
 
 int main(int argc, char *argv[]) {
@@ -226,7 +227,9 @@ int main(int argc, char *argv[]) {
 	int score = 0;
 	string button;
 	currentLevel = "A";
-	load_level(charCol, charRow, "levels/" + currentLevel);
+	load_level(/*charCol, charRow,*/ "levels/" + currentLevel);
+	charCol = spwnC;
+	charRow = spwnR;
 	scr = initscr();
 	name = argv[0];
 	notimeout(scr, true);
