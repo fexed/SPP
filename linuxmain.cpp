@@ -95,6 +95,10 @@ void respawn(int& Col, int& Row, int& score) {
 }
 
 void print_scene(int Col, int Row, int score) {
+	if (Col < 0) Col = 0;
+	if (Row < 0) Row = 0;
+	if (Col > 24) respawn(Col, Row, score);
+	if (Row > 79) Row = 79;
 	int i, j;
 	bool charPos = false;
 	for (j = 0; j < 25; j++) {
@@ -188,7 +192,7 @@ void char_move (string button, int& Col, int& Row, int& score) {
 		check_coin (Col, Row, score);
 		usleep(100);
 	} else if (button == "UP") {
-		int height = 8;
+		int height = (Col < 8) ? Col-1 : 8;
 		for (int i = 0; i <= height; i++) {
 			if (i < height) {Col--;}
 			button = check_button();
