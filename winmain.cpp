@@ -253,6 +253,7 @@ int main(int argc, char *argv[])
 	
 	load_level(charCol, charRow, "levels/" + currentLevel);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+	system("mode CON: COLS=80");
 	
  	while(true)
 	{
