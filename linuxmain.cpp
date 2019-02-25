@@ -111,9 +111,10 @@ void print_scene(int Col, int Row, int score) {
 					addch('C');			//E nel caso lo posiziona
 					attroff(COLOR_PAIR(1));
 					charPos = true;
+				} else if (loadedLevel[i][j] == '\n') {addch(loadedLevel[i][j]);  break;
 				} else {attron(COLOR_PAIR(4)); addch(loadedLevel[i][j]); attroff(COLOR_PAIR(4));}
-			} else {attron(COLOR_PAIR(4)); addch(loadedLevel[i][j]); attroff(COLOR_PAIR(4));}
-			if (loadedLevel[i][j] == '\n') {break;}
+			} else if (loadedLevel[i][j] == '\n') {addch(loadedLevel[i][j]);  break;}
+			else {attron(COLOR_PAIR(4)); addch(loadedLevel[i][j]); attroff(COLOR_PAIR(4));}
 		}
 		if (loadedLevel[i][j] == 'ù') {break;}
 	}
