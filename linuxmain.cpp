@@ -108,29 +108,24 @@ void print_scene(int Col, int Row, int score) {
 			} else if (!charPos) {				    //Se il personaggio non è ancora stato posizionato
 				if (Col == j && Row == i) { 		//Ne verifica la posizione
 					attron(COLOR_PAIR(1));
-					addch('I');			//E nel caso lo posiziona
+					addch('C');			//E nel caso lo posiziona
 					attroff(COLOR_PAIR(1));
 					charPos = true;
-				} else {addch(loadedLevel[i][j]);}
-			} else if (loadedLevel[i][j] == 'ù') {break;}
-			else {attron(COLOR_PAIR(4)); addch(loadedLevel[i][j]); attroff(COLOR_PAIR(4));}
-			
+				} else {attron(COLOR_PAIR(4)); addch(loadedLevel[i][j]); attroff(COLOR_PAIR(4));}
+			} else {attron(COLOR_PAIR(4)); addch(loadedLevel[i][j]); attroff(COLOR_PAIR(4));}
 			if (loadedLevel[i][j] == '\n') {break;}
-			
 		}
 		if (loadedLevel[i][j] == 'ù') {break;}
 	}
 	printw("\n[LINUX SPP]\t\tScore: %d\t\tLINUXVER\t"/*\n--------------------------------------------------------------------------------\n"*/, score); //Intestazione
 	printw("C%d R%d", Col, Row);
-	//cout << "Frecce direzionali:\tmovimento\n\tTasto ESC:\trespawn" << endl;
-	//cout << endl << "COL: " << Col << endl << "ROW: " << Row;
 }
 
 void char_move (string button, int& Col, int& Row, int& score) {
 	if (button == "RIGHT") {
 		if (loadedLevel[Row+1][Col] == 'W') {
 			currentLevel = "B";
-			load_level(/*Col, Row,*/ "levels/" + currentLevel);
+			load_level("levels/" + currentLevel);
 		}
 		else if (loadedLevel[Row+1][Col] == '_' || loadedLevel[Row+1][Col] == '^') {Row++;}
 		else if (loadedLevel[Row+1][Col] == '/' || loadedLevel[Row][Col] == '/') {Row++; Col--;}
