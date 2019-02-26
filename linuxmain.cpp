@@ -231,8 +231,8 @@ int main(int argc, char *argv[]) {
 	init_pair(2, COLOR_RED, COLOR_YELLOW);
 	init_pair(3, COLOR_GREEN, COLOR_BLACK);
 	init_pair(4, COLOR_WHITE, COLOR_BLACK);
-	resizeterm(25, 80);
-	wresize(scr, 25, 80);
+	//resizeterm(25, 80);
+	//wresize(scr, 25, 80);
 
 	while(true) {
 		erase();
