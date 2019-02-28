@@ -75,12 +75,12 @@ void check_coin (int Col, int Row, float& score)
 void respawn(int& Col, int& Row, float& score)
 {
 	//decrementa vita
-	load_level(Col, Row, "levels/" + currentLevel);
-	Beep(750, 50);
+	/*Beep(750, 50);
 	Beep(500, 150);
-	Beep(250, 300);
+	Beep(250, 300);*/
 	Col = spwnC;
 	Row = spwnR;
+	load_level(Col, Row, "levels/" + currentLevel);
 	score = 0;
 	Sleep(100);
 }
