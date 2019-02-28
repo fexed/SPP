@@ -89,7 +89,7 @@ void print_scene(int Col, int Row, float score)
 {
 	int i, j;
 	bool charPos = false;
-	cout << "\tSplatform\t\tScore: " << score << "\t\t" << "MOREMORE" << "\t" << endl << "--------------------------------------------------------------------------------" << endl; //Intestazione
+	cout << "\tSPP\t\tScore: " << score << "\t\t" << "MOREMORE" << "\t" << endl << "--------------------------------------------------------------------------------" << endl; //Intestazione
 	for (j = 0; j <= 25; j++)
 	{
 		for (i = 0; i < 80; i++)
