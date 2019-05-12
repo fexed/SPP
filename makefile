@@ -1,3 +1,13 @@
+CC 			= g++
+CFLAGS		= -g -Wall -Wno-multichar
+OPTFLAGS	=
+INCLUDES	= -I.
+LDFLAGS		= -L.
+LIBS		= -lX11 -lncurses
+
+.PHONY: all
+
 all : 
-	echo "Compiling"
-	g++ linuxmain.cpp -o spplinux -g -lX11 -Wno-multichar -lncurses
+	@echo "Compiling"
+	$(CC) $(CFLAGS) $(INCLUDES) $(OPTFLAGS) linuxmain.cpp -o spplinux $(LIBS)
+	@echo "Done"
