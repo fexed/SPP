@@ -75,12 +75,12 @@ void check_coin (int Col, int Row, float& score)
 void respawn(int& Col, int& Row, float& score)
 {
 	//decrementa vita
-	load_level(Col, Row, "levels/" + currentLevel);
-	Beep(750, 50);
+	/*Beep(750, 50);
 	Beep(500, 150);
-	Beep(250, 300);
+	Beep(250, 300);*/
 	Col = spwnC;
 	Row = spwnR;
+	load_level(Col, Row, "levels/" + currentLevel);
 	score = 0;
 	Sleep(100);
 }
@@ -89,7 +89,7 @@ void print_scene(int Col, int Row, float score)
 {
 	int i, j;
 	bool charPos = false;
-	cout << "\tSplatform\t\tScore: " << score << "\t\t" << "MOREMORE" << "\t" << endl << "--------------------------------------------------------------------------------" << endl; //Intestazione
+	cout << "\tSPP\t\tScore: " << score << "\t\t" << "MOREMORE" << "\t" << endl << "--------------------------------------------------------------------------------" << endl; //Intestazione
 	for (j = 0; j <= 25; j++)
 	{
 		for (i = 0; i < 80; i++)
