@@ -34,9 +34,7 @@ void load_level(int &Col, int &Row, string levelName) {
 				}
 				if (loadedLevel[i][j] == '\n' || loadedLevel[i][j] == 'ù') {break;}
 			}
-			if (loadedLevel[i][j] == 'ù') {
-				break;
-			}
+			if (loadedLevel[i][j] == 'ù') {break;}
 		}
 	}
 	level.close();
@@ -45,23 +43,80 @@ void load_level(int &Col, int &Row, string levelName) {
 string check_button() {
 	string value = 	(GetAsyncKeyState(VK_UP) < 0) ? ("UP") :
 					(GetAsyncKeyState(VK_LEFT) < 0) ? ("LEFT") :
-					((GetAsyncKeyState(VK_RIGHT) < 0) ? ("RIGHT") : 
-					((GetAsyncKeyState(VK_DOWN) < 0) ? ("DOWN") : 
-					((GetAsyncKeyState(VK_ESCAPE) < 0) ? ("ESC") : 
+					((GetAsyncKeyState(VK_RIGHT) < 0) ? ("RIGHT") :
+					((GetAsyncKeyState(VK_DOWN) < 0) ? ("DOWN") :
+					((GetAsyncKeyState(VK_ESCAPE) < 0) ? ("ESC") :
 					(" "))));
 	return value;
 }
 
 void check_coin (int Col, int Row, float& score) {
+	if (loadedLevel[Row][Col] == '^') {
 		//Beep(1000, 100);
 		cout << "\a";
 		score++;
-		if (loadedLevel[Row+1][Col] == ' ' && loadedLevel[Row-1][Col] == ' ') {loadedLevel[Row][Col] = ' ';}
-		else {loadedLevel[Row][Col] = '_';}
+		if (loadedLevel[Row+1][Col] == ' ' && loadedLevel[Row-1][Col] == ' ')
+		{loadedLevel[Row][Col] = ' ';}
+		else
+		{loadedLevel[Row][Col] = '_';}
 	}
 }
 
 void respawn(int& Col, int& Row, float& score) {
+	//decrementa vita
+	/*Beep(750, 50);
+	Beep(500, 150);
+	Beep(250, 300);*/
+	Col = spwnC;
+	Row = spwnR;
+	load_level(Col, Row, "levels/" + currentLevel);
+	score = 0;
+	Sleep(100);
+}
+
+void print_scene(int Col, int Row, float score) {
+	int i, j;
+	bool charPos = false;
+	cout << "\tSPP\t\tScore: " << score << "\t\t" << "MOREMORE" << "\t" << endl << "--------------------------------------------------------------------------------" << endl; //Intestazione
+	for (j = 0; j <= 25; j++) {
+		for (i = 0; i < 80; i++) {
+			if (loadedLevel[i][j] == '^') {
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+				cout << '°';
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+			}
+			else if (loadedLevel[i][j] == 'X') {
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+				cout << loadedLevel[i][j];
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+			}
+			else if (loadedLevel[i][j] == 'W') {
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
+				cout << '_';
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+			}
+			else if (!charPos) {
+				if (Col == j && Row == i) {
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+					cout << "O";			//E nel caso lo posiziona
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+					charPos = true;
+				}
+				else {cout << loadedLevel[i][j];}
+			}
+			else if (loadedLevel[i][j] == 'ù') {break;}
+			else {cout << loadedLevel[i][j];}
+			
+			if (loadedLevel[i][j] == '\n') {break;}
+			
+		}
+		if (loadedLevel[i][j] == 'ù') {break;}
+	}
+	//cout << "Frecce direzionali:\tmovimento\n\tTasto ESC:\trespawn" << endl;
+	//cout << endl << "COL: " << Col << endl << "ROW: " << Row;
+}
+void char_move (string button, int& Col, int& Row, float& score) {
+	if (button == "RIGHT") {
 		if (loadedLevel[Row+1][Col] == 'W') {
 			currentLevel = "B";
 			load_level(Col, Row, "levels/" + currentLevel);
@@ -107,12 +162,11 @@ void respawn(int& Col, int& Row, float& score) {
 				Sleep(25);
 			}	
 		}
-		else if (loadedLevel[Row-1][Col] == 'X')
-		{respawn(Col, Row, score);}
+		else if (loadedLevel[Row-1][Col] == 'X') {respawn(Col, Row, score);}
 		check_coin (Col, Row, score);
 		Sleep(100);
 	}
-	if (button == "UP")	{
+	if (button == "UP") {
 		for (int i = 0; i <= 4; i++) {
 			if (i < 4) {Col--;}
 			button = check_button();
@@ -132,10 +186,8 @@ void respawn(int& Col, int& Row, float& score) {
 			system("CLS");
 			print_scene(Col, Row, score);
 			
-			if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == 'X' || loadedLevel[Row][Col] == '|')
-			{respawn(Col, Row, score); break;}
-			else if (loadedLevel[Row][Col] == '_' || loadedLevel[Row][Col] == '/' || loadedLevel[Row][Col] == '\\' || loadedLevel[Row][Col] == '^')
-			{break;}
+			if (loadedLevel[Row][Col] == '-' || loadedLevel[Row][Col] == 'X' || loadedLevel[Row][Col] == '|') {respawn(Col, Row, score); break;}
+			else if (loadedLevel[Row][Col] == '_' || loadedLevel[Row][Col] == '/' || loadedLevel[Row][Col] == '\\' || loadedLevel[Row][Col] == '^') {break;}
 			
 			Sleep(25);
 		}
